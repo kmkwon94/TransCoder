@@ -1,0 +1,84 @@
+<!-- fileupload html 만들기-->
+<html>
+  <head>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>TransCoder</title>    
+</head>
+  <body>
+    <div class = "container">
+      <div class="jumbotron mt-3">
+        <h1>TransCoder</h1>
+          <A>Original Git Hub repository : </A> <A href="https://github.com/facebookresearch/TransCoder"> TranslateCoder</A>
+          <br>
+          <A>Ainize Git Hub repository : </A> <A href="https://github.com/kmkwon94/TransCoder"> TranslateCoder(Ainized) </A>
+          <hr class="solid">
+          <form action="/fileUpload" method="POST" enctype="multipart/form-data">
+            <h3>Choose source language</h3>
+            <label
+              ><input type="radio" name="source" value="python" onclick="invaild()"/> python </label
+            >
+            <label
+              ><input type="radio" name="source" value="cpp" onclick="invaild()"/> c++ </label
+            >
+            <label
+              ><input type="radio" name="source" value="java" onclick="invaild()"/> java </label
+            >
+            <h3>Choose target language</h3>
+            <label
+              ><input type="radio" name="target" value="python" onclick="invaild()"/> python </label
+            >
+            <label
+              ><input type="radio" name="target" value="cpp" onclick="invaild()"/> c++ </label
+            >
+            <label
+              ><input type="radio" name="target" value="java" onclick="invaild()"/> java </label
+            >
+            
+            <script>
+              var source = document.getElementsByName("source")
+              var target = document.getElementsByName("target")
+              function invaild(){
+                if(source[0].checked == true){
+                  target[0].style.disabled = true;
+                } else if(source[1].checked == true){
+                  target[1].style.disabled = true;
+                }else if(source[2].checked == true){
+                  target[2].style.disabled = true;
+                }
+              }
+            </script>
+
+          <h3>Upload and Run TransCoder</h3>
+            <a href="/static/sample_img/background_1.jpg" download>>> Download sample1 input image</a><br/>
+            <a href="/static/sample_img/background_2.jpg" download>>> Download sample2 input image</a><br/>
+            <a href="/static/sample_img/background_3.jpg" download>>> Download sample3 input image</a><br/>
+            <a href="/static/sample_img/background_4.jpg" download>>> Download sample4 input image</a><br/>
+            <label for="source">Input image : </label>
+            <input type="file" name="file" style="margin-right: 10px; margin-bottom: 10px;"/>
+            <input type="submit" class="btn btn-primary btn-lg" style="margin-left: auto;" />
+          </form>
+          <div id="sampleBox">
+            <h3>Example</h3>
+            <figure style="text-align: center;">
+              <img class="img" src="" alt="examples">
+                  <figcaption style="text-align: center;">examples</figcaption>
+            </figure>
+          </div>
+          <div id ='resultBox' style="margin-left: auto; margin-right: auto;">
+            <p id='errorbox'></p>
+            <img id='resultImage' src="" alt="">
+          </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+

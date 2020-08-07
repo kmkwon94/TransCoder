@@ -47,7 +47,7 @@ def get_parser():
                         default="data/BPE_with_comments_codes", help="Path to BPE codes.")
     parser.add_argument("--beam_size", type=int, default=1,
                         help="Beam size. The beams will be printed in order of decreasing likelihood.")
-
+    parser.add_argument("--input_dir", type=str, default="", help="Wirte input file path")
     return parser
 
 
@@ -170,14 +170,22 @@ if __name__ == '__main__':
     # Initialize translator
     translator = Translator(params)
 
-    # read input code from stdin
+    # read input code from k.read()
     src_sent = []
-    input = sys.stdin.read().strip()
-
+    k = open(params.input_dir, 'r')
+    input = k.read()
+    #input = sys.stdin.read().strip()
+    print(input)
+    k.close()
     with torch.no_grad():
         output = translator.translate(
             input, lang1=params.src_lang, lang2=params.tgt_lang, beam_size=params.beam_size)
 
+    f = open("result.txt", 'w')
+
     for out in output:
         print("=" * 20)
         print(out)
+        f.write(out)
+    
+    f.close()

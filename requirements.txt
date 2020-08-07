@@ -1,0 +1,9 @@
+torch
+clang
+submitit
+six
+sacrebleu==1.2.11
+flask
+flask_cors
+numpy
+Cython

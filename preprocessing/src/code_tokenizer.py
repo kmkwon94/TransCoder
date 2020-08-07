@@ -21,7 +21,7 @@ from preprocessing.src.timeout import timeout, TimeoutError
 from sacrebleu import tokenize_v14_international
 
 TOK_NO_SPACE_BEFORE = {',', ';'}
-clang.cindex.Config.set_library_path('/usr/lib/llvm-7/lib/')
+clang.cindex.Config.set_library_path('/usr/lib/llvm-6.0/lib/')
 STRINGS_AND_COMMENTS_TOKEN_KINDS = {TokenKind.LITERAL, TokenKind.COMMENT}
 logging.basicConfig(
     filename='timeout_cpp_tokenizer_examples.log', level=logging.DEBUG)
