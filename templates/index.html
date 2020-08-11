@@ -23,23 +23,23 @@
           <form action="/fileUpload" method="POST" enctype="multipart/form-data">
             <h3>Choose source language</h3>
             <label
-              ><input type="radio" name="source" value="python" onclick="invaild()"/> python </label
+              ><input type="radio" name="source" value="python" onclick="invaild()" required/> python </label
             >
             <label
-              ><input type="radio" name="source" value="cpp" onclick="invaild()"/> c++ </label
+              ><input type="radio" name="source" value="cpp" onclick="invaild()" required/> c++ </label
             >
             <label
-              ><input type="radio" name="source" value="java" onclick="invaild()"/> java </label
+              ><input type="radio" name="source" value="java" onclick="invaild()" required/> java </label
             >
             <h3>Choose target language</h3>
             <label
-              ><input type="radio" name="target" value="python" onclick="invaild()"/> python </label
+              ><input type="radio" name="target" value="python" onclick="invaild()" required/> python </label
             >
             <label
-              ><input type="radio" name="target" value="cpp" onclick="invaild()"/> c++ </label
+              ><input type="radio" name="target" value="cpp" onclick="invaild()" required/> c++ </label
             >
             <label
-              ><input type="radio" name="target" value="java" onclick="invaild()"/> java </label
+              ><input type="radio" name="target" value="java" onclick="invaild()" required/> java </label
             >
             
             <script>
@@ -47,11 +47,17 @@
               var target = document.getElementsByName("target")
               function invaild(){
                 if(source[0].checked == true){
-                  target[0].style.disabled = true;
+                  target[0].disabled = true;
+                  target[1].disabled = false;
+                  target[2].disabled = false;
                 } else if(source[1].checked == true){
-                  target[1].style.disabled = true;
+                  target[1].disabled = true;
+                  target[2].disabled = false;
+                  target[0].disabled = false;
                 }else if(source[2].checked == true){
-                  target[2].style.disabled = true;
+                  target[2].disabled = true;
+                  target[0].disabled = false;
+                  target[1].disabled = false;
                 }
               }
             </script>
@@ -61,10 +67,15 @@
             <a href="/static/sample_img/background_2.jpg" download>>> Download sample2 input image</a><br/>
             <a href="/static/sample_img/background_3.jpg" download>>> Download sample3 input image</a><br/>
             <a href="/static/sample_img/background_4.jpg" download>>> Download sample4 input image</a><br/>
-            <label for="source">Input image : </label>
+            <label for="source">Input file : </label>
             <input type="file" name="file" style="margin-right: 10px; margin-bottom: 10px;"/>
             <input type="submit" class="btn btn-primary btn-lg" style="margin-left: auto;" />
           </form>
+          <div id = 'result'>
+            {% for string in rawString %}
+            <p>{{string|safe}}</p>
+            {% endfor %}
+          </div>
           <div id="sampleBox">
             <h3>Example</h3>
             <figure style="text-align: center;">

@@ -28,7 +28,7 @@ from XLM.src.utils import AttrDict
 
 SUPPORTED_LANGUAGES = ['cpp', 'java', 'python']
 
-
+'''
 def get_parser():
     """
     Generate a parameters parser.
@@ -49,11 +49,11 @@ def get_parser():
                         help="Beam size. The beams will be printed in order of decreasing likelihood.")
     parser.add_argument("--input_dir", type=str, default="", help="Wirte input file path")
     return parser
-
+'''
 
 class Translator:
-    def __init__(self, params):
-        reloaded = torch.load(params.model_path, map_location='cpu')
+    def __init__(self, model):
+        reloaded = torch.load(model, map_location='cpu')
         reloaded['encoder'] = {(k[len('module.'):] if k.startswith('module.') else k): v for k, v in
                                reloaded['encoder'].items()}
         assert 'decoder' in reloaded or (
@@ -79,7 +79,7 @@ class Translator:
         assert self.reloaded_params.mask_index == self.dico.index(MASK_WORD)
 
         # build model / reload weights
-        self.reloaded_params['reload_model'] = ','.join([params.model_path] * 2)
+        self.reloaded_params['reload_model'] = ','.join([model] * 2)
         encoder, decoder = build_model(self.reloaded_params, self.dico)
 
         self.encoder = encoder[0]
@@ -97,7 +97,7 @@ class Translator:
 
         self.encoder.eval()
         self.decoder.eval()
-        self.bpe_model = fastBPE.fastBPE(os.path.abspath(params.BPE_path))
+        self.bpe_model = fastBPE.fastBPE(os.path.abspath('data/BPE_with_comments_codes'))
 
     def translate(self, input, lang1, lang2, n=1, beam_size=1, sample_temperature=None, device='cuda:0'):
         with torch.no_grad():
