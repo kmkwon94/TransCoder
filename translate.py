@@ -28,7 +28,6 @@ from XLM.src.utils import AttrDict
 
 SUPPORTED_LANGUAGES = ['cpp', 'java', 'python']
 
-'''
 def get_parser():
     """
     Generate a parameters parser.
@@ -49,11 +48,10 @@ def get_parser():
                         help="Beam size. The beams will be printed in order of decreasing likelihood.")
     parser.add_argument("--input_dir", type=str, default="", help="Wirte input file path")
     return parser
-'''
 
 class Translator:
-    def __init__(self, model):
-        reloaded = torch.load(model, map_location='cpu')
+    def __init__(self, params):
+        reloaded = torch.load(params.model_path, map_location='cpu')
         reloaded['encoder'] = {(k[len('module.'):] if k.startswith('module.') else k): v for k, v in
                                reloaded['encoder'].items()}
         assert 'decoder' in reloaded or (
@@ -79,7 +77,7 @@ class Translator:
         assert self.reloaded_params.mask_index == self.dico.index(MASK_WORD)
 
         # build model / reload weights
-        self.reloaded_params['reload_model'] = ','.join([model] * 2)
+        self.reloaded_params['reload_model'] = ','.join([params.model_path] * 2)
         encoder, decoder = build_model(self.reloaded_params, self.dico)
 
         self.encoder = encoder[0]
@@ -99,7 +97,7 @@ class Translator:
         self.decoder.eval()
         self.bpe_model = fastBPE.fastBPE(os.path.abspath('data/BPE_with_comments_codes'))
 
-    def translate(self, input, lang1, lang2, n=1, beam_size=1, sample_temperature=None, device='cuda:0'):
+    def translate(self, input_file, lang1, lang2, n=1, beam_size=1, sample_temperature=None, device='cuda:0'):
         with torch.no_grad():
             assert lang1 in {'python', 'java', 'cpp'}, lang1
             assert lang2 in {'python', 'java', 'cpp'}, lang2
@@ -113,16 +111,21 @@ class Translator:
             lang1_id = self.reloaded_params.lang2id[lang1]
             lang2_id = self.reloaded_params.lang2id[lang2]
 
-            tokens = [t for t in tokenizer(input)]
+            print("this is input_file",type(input_file), input_file)
+            tokens = [t for t in tokenizer(input_file)]
             tokens = self.bpe_model.apply(tokens)
             tokens = ['</s>'] + tokens + ['</s>']
-            input = " ".join(tokens)
+            print("this is type of tokenizer :", tokenizer(input_file)) #list
+            #print("this is tokenizer ", tokenizer(input_file))
+            input_file = " ".join(tokens) #str(ascii)
+            print("this is type of input_file in translate.py :", type(input_file))
+            print("this is input_file", input_file)
             # create batch
-            len1 = len(input.split())
+            len1 = len(input_file.split())
             len1 = torch.LongTensor(1).fill_(len1).to(DEVICE)
 
             x1 = torch.LongTensor([self.dico.index(w)
-                                   for w in input.split()]).to(DEVICE)[:, None]
+                                   for w in input_file.split()]).to(DEVICE)[:, None]
             langs1 = x1.clone().fill_(lang1_id)
 
             enc1 = self.encoder('fwd', x=x1, lengths=len1,
@@ -149,8 +152,11 @@ class Translator:
                 tok.append(" ".join(wid).replace("@@ ", ""))
 
             results = []
+            print(tok)
             for t in tok:
                 results.append(detokenizer(t))
+                print(results)
+            print("final ",results) 
             return results
 
 
@@ -177,15 +183,16 @@ if __name__ == '__main__':
     #input = sys.stdin.read().strip()
     print(input)
     k.close()
+    print("this is local input ", input, " type : " , type(input))
     with torch.no_grad():
         output = translator.translate(
             input, lang1=params.src_lang, lang2=params.tgt_lang, beam_size=params.beam_size)
 
     f = open("result.txt", 'w')
-
+    print("this is output on local ", output, " type : ", type(output))
     for out in output:
         print("=" * 20)
-        print(out)
+        print(out, type(out))
         f.write(out)
     
     f.close()
