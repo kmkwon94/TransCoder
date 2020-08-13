@@ -28,27 +28,6 @@ from XLM.src.utils import AttrDict
 
 SUPPORTED_LANGUAGES = ['cpp', 'java', 'python']
 
-def get_parser():
-    """
-    Generate a parameters parser.
-    """
-    # parse parameters
-    parser = argparse.ArgumentParser(description="Translate sentences")
-
-    # model
-    parser.add_argument("--model_path", type=str,
-                        default="", help="Model path")
-    parser.add_argument("--src_lang", type=str, default="",
-                        help=f"Source language, should be either {', '.join(SUPPORTED_LANGUAGES[:-1])} or {SUPPORTED_LANGUAGES[-1]}")
-    parser.add_argument("--tgt_lang", type=str, default="",
-                        help=f"Target language, should be either {', '.join(SUPPORTED_LANGUAGES[:-1])} or {SUPPORTED_LANGUAGES[-1]}")
-    parser.add_argument("--BPE_path", type=str,
-                        default="data/BPE_with_comments_codes", help="Path to BPE codes.")
-    parser.add_argument("--beam_size", type=int, default=1,
-                        help="Beam size. The beams will be printed in order of decreasing likelihood.")
-    parser.add_argument("--input_dir", type=str, default="", help="Wirte input file path")
-    return parser
-
 class Translator:
     def __init__(self, model):
         reloaded = torch.load(model, map_location='cpu')
@@ -111,15 +90,11 @@ class Translator:
             lang1_id = self.reloaded_params.lang2id[lang1]
             lang2_id = self.reloaded_params.lang2id[lang2]
 
-            #print("this is input_file",type(input_file), input_file)
             tokens = [t for t in tokenizer(input_file)]
             tokens = self.bpe_model.apply(tokens)
             tokens = ['</s>'] + tokens + ['</s>']
-            #print("this is type of tokenizer :", tokenizer(input_file)) #list
-            #print("this is tokenizer ", tokenizer(input_file))
-            input_file = " ".join(tokens) #str(ascii)
-            #print("this is type of input_file in translate.py :", type(input_file))
-            #print("this is input_file", input_file)
+
+            input_file = " ".join(tokens) 
             # create batch
             len1 = len(input_file.split())
             len1 = torch.LongTensor(1).fill_(len1).to(DEVICE)
@@ -152,14 +127,11 @@ class Translator:
                 tok.append(" ".join(wid).replace("@@ ", ""))
 
             results = []
-            #print(tok)
             for t in tok:
-                results.append(detokenizer(t))
-                #print(results)
-            #print("final ",results) 
+                results.append(detokenizer(t)) 
             return results
 
-
+'''
 if __name__ == '__main__':
     # generate parser / parse parameters
     parser = get_parser()
@@ -196,3 +168,4 @@ if __name__ == '__main__':
         f.write(out)
     
     f.close()
+'''

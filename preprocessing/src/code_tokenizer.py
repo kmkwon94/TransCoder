@@ -317,7 +317,7 @@ def get_function_name_python(s):
     return s[s.index('def') + 1]
 
 
-@timeout(10)
+#@timeout(10)
 def get_cpp_tokens_and_types(s):
     tokens = []
     assert isinstance(s, str)
@@ -331,6 +331,7 @@ def get_cpp_tokens_and_types(s):
 
 
 def tokenize_cpp(s, keep_comments=False):
+    
     tokens = []
     assert isinstance(s, str)
     try:
@@ -350,8 +351,12 @@ def tokenize_cpp(s, keep_comments=False):
                         tok, CPP_CHAR2TOKEN, CPP_TOKEN2CHAR, False))
             else:
                 tokens.append(tok)
-        #print("Here is tokenize_cpp print tokens : ", tokens)
         return tokens
+    except KeyboardInterrupt:
+        raise
+    except:
+        return []
+    '''
     except KeyboardInterrupt:
         raise
     except TimeoutError:
@@ -359,9 +364,11 @@ def tokenize_cpp(s, keep_comments=False):
         logging.info('*' * 20)
         logging.info(f'TimeOut Error for string {s}')
         return []
-    except:
+    except Exception as e:
+        print(e)
+        print("last error")
         return []
-
+    '''
 
 def tokenize_java(s, keep_comments=False):
     try:
