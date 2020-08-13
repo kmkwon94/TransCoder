@@ -50,8 +50,8 @@ def get_parser():
     return parser
 
 class Translator:
-    def __init__(self, params):
-        reloaded = torch.load(params.model_path, map_location='cpu')
+    def __init__(self, model):
+        reloaded = torch.load(model, map_location='cpu')
         reloaded['encoder'] = {(k[len('module.'):] if k.startswith('module.') else k): v for k, v in
                                reloaded['encoder'].items()}
         assert 'decoder' in reloaded or (
@@ -77,7 +77,7 @@ class Translator:
         assert self.reloaded_params.mask_index == self.dico.index(MASK_WORD)
 
         # build model / reload weights
-        self.reloaded_params['reload_model'] = ','.join([params.model_path] * 2)
+        self.reloaded_params['reload_model'] = ','.join([model] * 2)
         encoder, decoder = build_model(self.reloaded_params, self.dico)
 
         self.encoder = encoder[0]
@@ -111,15 +111,15 @@ class Translator:
             lang1_id = self.reloaded_params.lang2id[lang1]
             lang2_id = self.reloaded_params.lang2id[lang2]
 
-            print("this is input_file",type(input_file), input_file)
+            #print("this is input_file",type(input_file), input_file)
             tokens = [t for t in tokenizer(input_file)]
             tokens = self.bpe_model.apply(tokens)
             tokens = ['</s>'] + tokens + ['</s>']
-            print("this is type of tokenizer :", tokenizer(input_file)) #list
+            #print("this is type of tokenizer :", tokenizer(input_file)) #list
             #print("this is tokenizer ", tokenizer(input_file))
             input_file = " ".join(tokens) #str(ascii)
-            print("this is type of input_file in translate.py :", type(input_file))
-            print("this is input_file", input_file)
+            #print("this is type of input_file in translate.py :", type(input_file))
+            #print("this is input_file", input_file)
             # create batch
             len1 = len(input_file.split())
             len1 = torch.LongTensor(1).fill_(len1).to(DEVICE)
@@ -152,11 +152,11 @@ class Translator:
                 tok.append(" ".join(wid).replace("@@ ", ""))
 
             results = []
-            print(tok)
+            #print(tok)
             for t in tok:
                 results.append(detokenizer(t))
-                print(results)
-            print("final ",results) 
+                #print(results)
+            #print("final ",results) 
             return results
 
 
@@ -181,9 +181,9 @@ if __name__ == '__main__':
     k = open(params.input_dir, 'r')
     input = k.read()
     #input = sys.stdin.read().strip()
-    print(input)
     k.close()
-    print("this is local input ", input, " type : " , type(input))
+    print("this is local input ")
+    print(input, " type : " , type(input))
     with torch.no_grad():
         output = translator.translate(
             input, lang1=params.src_lang, lang2=params.tgt_lang, beam_size=params.beam_size)

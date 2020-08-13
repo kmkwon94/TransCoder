@@ -335,6 +335,7 @@ def tokenize_cpp(s, keep_comments=False):
     assert isinstance(s, str)
     try:
         tokens_and_types = get_cpp_tokens_and_types(s)
+        #print("Here is tokenize_cpp print tokens_and_types : ", tokens_and_types)
         for tok, typ in tokens_and_types:
             if not keep_comments and typ == TokenKind.COMMENT:
                 continue
@@ -349,6 +350,7 @@ def tokenize_cpp(s, keep_comments=False):
                         tok, CPP_CHAR2TOKEN, CPP_TOKEN2CHAR, False))
             else:
                 tokens.append(tok)
+        #print("Here is tokenize_cpp print tokens : ", tokens)
         return tokens
     except KeyboardInterrupt:
         raise
@@ -458,6 +460,7 @@ def indent_lines(lines):
 
 def detokenize_java(s):
     assert isinstance(s, str) or isinstance(s, list)
+    #print("here is detokenize_java print s : ", s)
     if isinstance(s, list):
         s = ' '.join(s)
     s = s.replace('ENDCOM', 'NEW_LINE')
@@ -491,6 +494,7 @@ def detokenize_java(s):
         raise
     except:
         pass
+    #print("here is detokenize_java print untok_s : ", s)
     return untok_s
 
 

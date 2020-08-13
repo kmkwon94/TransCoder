@@ -48,31 +48,27 @@ def translate():
         #input_file = f.read()
         input_file = f.read()
         #input_file_string = input_file.decode('utf-8').encode('utf-8').decode('utf-8')
-        print("this is input_file : ", input_file)
+        #print("this is input_file : ", input_file)
         #input_file_string = str(input_file)
-        input_file_string1 = input_file.decode("utf-8", "strict")
-        input_file_string2 = input_file.decode(encoding = "utf-8")
-        input_file_string3 = input_file.decode(encoding = "ascii")
+        input_file_string = input_file.decode("utf-8")
+        #input_file_string2 = input_file.decode(encoding = "utf-8")
+        #input_file_string3 = input_file.decode(encoding = "ascii")
         #print("this is input_file_string(str(input_file)) : ", input_file_string, " type : ", type(input_file_string))
-        print("this is input_file_string1 input_file.decode('utf-8') : ", input_file_string1, " type : ", type(input_file_string1))
-        print("this is input_file_string2(encoding with utf-8) : ", input_file_string2, " type : ", type(input_file_string2))
-        print("this is input_file_string3(encoding with ascii) : ", input_file_string3, " type : ", type(input_file_string3)) 
+        #print("this is input_file_string1 input_file.decode('utf-8') : ", input_file_string1, " type : ", type(input_file_string1))
+        #print("this is input_file_string2(encoding with utf-8) : ", input_file_string2, " type : ", type(input_file_string2))
+        #print("this is input_file_string3(encoding with ascii) : ", input_file_string3, " type : ", type(input_file_string3)) 
         
         if check_source_value == 'cpp' and check_target_value == 'java' : 
-            result = run_model_1(input_file_string1, check_source_value, check_target_value, userDirName)
-            print("hi1")
+            result = run_model_1(input_file_string, check_source_value, check_target_value, userDirName)
             return render_template('index.html', rawString = result)
         if check_source_value == 'java' : 
-            result = run_model_1(input_file_string1, check_source_value, check_target_value, userDirName)
-            print("hi2")
+            result = run_model_1(input_file_string, check_source_value, check_target_value, userDirName)
             return render_template('index.html', rawString = result)
         if check_source_value == 'python' : 
-            result = run_model_2(input_file_string1, check_source_value, check_target_value, userDirName)
-            print("hi3")
+            result = run_model_2(input_file_string, check_source_value, check_target_value, userDirName)
             return render_template('index.html', rawString = result)
         if check_source_value == 'cpp' and check_target_value == 'python' : 
-            result = run_model_2(input_file_string1, check_source_value, check_target_value, userDirName)
-            print("hi4")
+            result = run_model_2(input_file_string, check_source_value, check_target_value, userDirName)
             return render_template('index.html', rawString = result)
     #model_1
     #c++ -> java 
@@ -86,10 +82,8 @@ def translate():
 def run_model_1(input_dir, src_lang, tgt_lang, userDirName):
     with torch.no_grad():
         output = translator1.translate(input_dir, lang1=src_lang, lang2=tgt_lang, beam_size=1)
-        print(output)
     #os.mkdir('./static/' + userDirName)
     #result = makeOutputFile(tgt_lang, output, userDirName)
-    print(output)
     return output
 
 def run_model_2(input_dir, src_lang, tgt_lang, userDirName):
