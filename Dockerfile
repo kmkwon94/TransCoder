@@ -1,3 +1,4 @@
+FROM kmkwon94/transcodermodels AS build
 FROM nvidia/cuda:10.2-cudnn7-devel-ubuntu18.04
 
 # Install some basic utilities
@@ -41,3 +42,4 @@ RUN mv fastBPE /TransCoder
 WORKDIR /usr/lib/llvm-6.0/lib
 RUN mv libclang.so.1 libclang.so
 WORKDIR /TransCoder
+COPY --from=build /root/checkpoints /TransCoder/checkpoints

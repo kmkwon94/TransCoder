@@ -75,8 +75,8 @@ class thread_with_trace(ThreadWithReturnValue):
 
 #####################################################
 #preload model
-translator1 = Translator('model_1.pth')
-translator2 = Translator('model_2.pth')
+translator1 = Translator('/TransCoder/checkpoints/model_1.pth')
+translator2 = Translator('/TransCoder/checkpoints/model_2.pth')
 #####################################################
 
 @app.route('/')
@@ -90,48 +90,43 @@ def healthz():
 @app.route('/translate', methods=['POST'])
 def translate():
     if request.method == 'POST':
+        global threads
+        print(len(threads),"translate")
+
+        if len(threads) > 3:
+            return Response("error : Too many requests", status=429)
+
         userDirName = str(uuid.uuid4())
         f = request.files['file'] #input_dir
 
         check_source_value = request.form['source'] #source_lang
         check_target_value = request.form['target'] #target_lang
-        
         input_file = f.read()
         input_file_string = input_file.decode('utf-8')
-        print(input_file_string)
-        
         try:
             if check_source_value == 'cpp' and check_target_value == 'java' : 
                 result = run_model_1(input_file_string, check_source_value, check_target_value, userDirName)
-                #remove(userDirName)
-                print("hi1")
                 return render_template('index.html', rawString = result)
         except Exception :
-            return Response("There is problem in run model", status = 400)
+            return Response("There is problem in run model_1 cpp -> java", status = 400)
         try:
             if check_source_value == 'java' : 
                 result = run_model_1(input_file_string, check_source_value, check_target_value, userDirName)
-                remove(userDirName)
-                print("hi2")
                 return render_template('index.html', rawString = result)
         except Exception :
-            return Response("There is problem in run model", status = 400)
+            return Response("There is problem in run model_1 java -> python or cpp", status = 400)
         try:
             if check_source_value == 'python' :
                 result = run_model_2(input_file_string, check_source_value, check_target_value, userDirName)
-                remove(userDirName)
-                print("hi3")
                 return render_template('index.html', rawString = result)
         except Exception :
-            return Response("There is problem in run model", status=400)
+            return Response("There is problem in run model_2 python -> java or cpp", status=400)
         try:
             if check_source_value == 'cpp' and check_target_value == 'python' : 
                 result = run_model_2(input_file_string, check_source_value, check_target_value, userDirName)
-                remove(userDirName)
-                print("hi4")
                 return render_template('index.html', rawString = result)
         except Exception :
-            return Response("There is problem in run model", status=400)
+            return Response("There is problem in run model_2 cpp -> python", status=400)
    
 def run_model_1(input_dir, src_lang, tgt_lang, user_key):
     try:
@@ -152,7 +147,6 @@ def run_model_1(input_dir, src_lang, tgt_lang, user_key):
                 threads.pop(0)
                 raise Exception("error model does not work! please try again 30 seconds later")
             threads.pop(0)
-        print(output)
         return output
     except Exception as e:
         print(e)
@@ -177,7 +171,6 @@ def run_model_2(input_dir, src_lang, tgt_lang, user_key):
                 threads.pop(0)
                 raise Exception("error model does not work! please try again 30 seconds later")
             threads.pop(0)
-        print(output)
         return output
     except Exception as e:
         print(e)

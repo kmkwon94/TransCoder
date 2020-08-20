@@ -80,20 +80,20 @@ class Translator:
         with torch.no_grad():
             assert lang1 in {'python', 'java', 'cpp'}, lang1
             assert lang2 in {'python', 'java', 'cpp'}, lang2
-
+        
             DEVICE = device
             tokenizer = getattr(code_tokenizer, f'tokenize_{lang1}')
             detokenizer = getattr(code_tokenizer, f'detokenize_{lang2}')
             lang1 += '_sa'
             lang2 += '_sa'
-
+            
             lang1_id = self.reloaded_params.lang2id[lang1]
             lang2_id = self.reloaded_params.lang2id[lang2]
 
             tokens = [t for t in tokenizer(input_file)]
             tokens = self.bpe_model.apply(tokens)
             tokens = ['</s>'] + tokens + ['</s>']
-
+            
             input_file = " ".join(tokens) 
             # create batch
             len1 = len(input_file.split())
