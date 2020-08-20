@@ -1,5 +1,5 @@
 torch
-clang
+clang==6.0.0.2
 submitit
 six
 sacrebleu==1.2.11
