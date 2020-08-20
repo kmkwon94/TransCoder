@@ -43,3 +43,4 @@ WORKDIR /usr/lib/llvm-6.0/lib
 RUN mv libclang.so.1 libclang.so
 WORKDIR /TransCoder
 COPY --from=build /root/checkpoints /TransCoder/checkpoints
+CMD python3 server.py
