@@ -31,7 +31,7 @@ COPY requirements.txt .
 RUN ["python3", "-m", "pip", "install", "-r", "requirements.txt"]
 RUN git clone https://github.com/NVIDIA/apex
 WORKDIR /apex
-RUN pip3 install -v --no-cache-dir --global-option="--cpp_ext" --global-option="--cuda_ext" ./
+RUN pip3 install -v --no-cache-dir ./
 WORKDIR /TransCoder
 COPY . /TransCoder
 WORKDIR /TransCoder/XLM/tools
