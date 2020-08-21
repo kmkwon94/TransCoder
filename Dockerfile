@@ -1,5 +1,5 @@
 FROM kmkwon94/transcodermodels AS build
-FROM nvidia/cuda:10.2-cudnn7-devel-ubuntu18.04
+FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu18.04
 
 # Install some basic utilities
 RUN apt-get update && apt-get install -y \

@@ -2,6 +2,12 @@
 
 Pytorch original implementation of TransCoder in [Unsupervised Translation of Programming Languages](https://arxiv.org/pdf/2006.03511.pdf)
 
+[![Run on Ainize](https://ainize.ai/images/run_on_ainize_button.svg)](https://ainize.web.app/redirect?git_repo=https://github.com/kmkwon94/TransCoder)
+
+You can try TransCoder on Ainize!
+
+Click Run on Ainize and try it!
+
 ![Model](https://dl.fbaipublicfiles.com/transcoder/TransCoder_Schema.jpg)
 
 ## Dependencies
