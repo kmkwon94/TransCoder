@@ -8,8 +8,7 @@ You can try TransCoder on Ainize!
 
 Click Run on Ainize and try it!
 
-![Model](https://dl.fbaipublicfiles.com/transcoder/TransCoder_Schema.jpg)
-
+<img src = "https://dl.fbaipublicfiles.com/transcoder/TransCoder_Schema.jpg" width="100%" alt = "model"></img>
 ## Dependencies
 - Python 3
 - [NumPy](http://www.numpy.org/)
