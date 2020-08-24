@@ -1,4 +1,4 @@
-torch==1.5.1
+torch==1.4.0
 clang==6.0.0.2
 submitit
 six
