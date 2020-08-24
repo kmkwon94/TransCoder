@@ -28,10 +28,12 @@ RUN apt-get update && apt-get install -y \
  && rm -rf /var/lib/apt/lists/*
 
 #Set environment of Cuda 10.1
-ENV PATH=/usr/local/cuda/bin${PATH:+:${PATH}}
-ENV LD_LIBRARY_PATH=/usr/local/cuda-10.1/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
-ENV CUDA_HOME=/usr/local/cuda
+#ENV PATH=/usr/local/cuda/bin${PATH:+:${PATH}}
+#ENV LD_LIBRARY_PATH=/usr/local/cuda-10.1/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+#ENV CUDA_HOME=/usr/local/cuda
 
+ENV TORCH_CUDA_ARCH_LIST="Kepler;Kepler+Tesla;Maxwell;Maxwell+Tegra;Pascal;Volta;Turing" 
+RUN export FORCE_CUDA="1"
 RUN python3 -m pip install --upgrade pip
 COPY requirements.txt .
 RUN ["python3", "-m", "pip", "install", "-r", "requirements.txt"]
