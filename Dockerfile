@@ -31,9 +31,9 @@ RUN apt-get update && apt-get install -y \
 RUN python3 -m pip install --upgrade pip
 COPY requirements.txt .
 RUN ["python3", "-m", "pip", "install", "-r", "requirements.txt"]
-RUN git clone https://github.com/NVIDIA/apex
-WORKDIR /apex
-RUN pip3 install -v --no-cache-dir ./
+#RUN git clone https://github.com/NVIDIA/apex
+#WORKDIR /apex
+#RUN pip3 install -v --no-cache-dir ./
 WORKDIR /TransCoder
 COPY . /TransCoder
 WORKDIR /TransCoder/XLM/tools
