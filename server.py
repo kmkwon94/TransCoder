@@ -91,7 +91,6 @@ def healthz():
 def translate():
     if request.method == 'POST':
         global threads
-        print(len(threads),"translate")
 
         if len(threads) > 3:
             return Response("error : Too many requests", status=429)
@@ -136,7 +135,6 @@ def run_model_1(input_dir, src_lang, tgt_lang, user_key):
             t1.user_id = user_key
             threads.append(t1)
             while threads[0].user_id!=user_key:
-                print(str(user_key)+": ", threads[0].user_id)
                 if threads[0].is_alive():
                     threads[0].join()
             threads[0].start()
@@ -177,4 +175,4 @@ def run_model_2(input_dir, src_lang, tgt_lang, user_key):
         return Response("error! please try again", status=400)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80, debug=True)
+    app.run(host='0.0.0.0', port=80)
